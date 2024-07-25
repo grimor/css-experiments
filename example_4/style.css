@@ -1,0 +1,97 @@
+:root {
+  height: 100vh;
+  width: 100vh;
+  --repellerRadius: 100;
+  --repellerDiameter: calc(var(--repellerRadius) * 2 * 1px);
+}
+
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  width: 100%;
+}
+
+#app {
+  margin: 0 auto;
+}
+/* dx and dy are the vertical and horizontal distances between
+* the circle centers.
+*/
+/*         dx = x1 - x0; */
+/*         dy = y1 - y0; */
+.circle {
+  --radius: 50;
+  --diameter: calc(var(--radius) * 2 * 1px);
+  --x: 250;
+  --y: 150;
+  /* Calculate (X,Y) center point of circle */
+  --cx: calc(var(--x) - var(--radius));
+  --cy: calc(var(--y) - var(--radius));
+  /* Calculate distance on X axis between repeller center and circle center */
+  --dx: calc((var(--mouseX) - var(--x)) * -1);
+  /* Calculate distance on Y axis between repeller center and circle center */
+  --dy: calc((var(--mouseY) - var(--y)) * -1);
+  /* Calculate distance between circle centers */
+  --d: hypot(var(--dx), var(--dy));
+
+  /* Calculate unit vector from center of circle to center of repeller */
+  --vx: calc(var(--dx) / var(--d));
+  --vy: calc(var(--dy) / var(--d));
+
+  /* Calculate how much circle move by multiplying unit vector (X,Y) by distance of circle centers */
+  --dLeft: calc(
+    (var(--intersection) - var(--d)) * var(--vx) * var(--isIntersecting)
+  );
+  --dTop: calc(
+    (var(--intersection) - var(--d)) * var(--vy) * var(--isIntersecting)
+  );
+
+  /* Check if circle intersects, by adding radiuses. By subtracting radius sum from distance we will know if circles intersects. */
+  --intersection: calc(var(--radius) + var(--repellerRadius));
+  /* Little hack to simulate sign(), which is unavailable right now */
+  --isIntersecting: clamp(0, calc(var(--intersection) - var(--d)), 1);
+  position: absolute;
+
+  left: calc((var(--cx) + var(--dLeft)) * 1px);
+  top: calc((var(--cy) + var(--dTop)) * 1px);
+  width: var(--diameter);
+  height: var(--diameter);
+  background: #0061fe;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: inset 0 0 1px 2px #fff;
+}
+
+.circle img {
+  width: 36px;
+  height: 36px;
+}
+
+.circle:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* border: 2px solid #ccc; */
+}
+.debug-circle {
+  display: none;
+}
+
+.debug .debug-circle {
+  --radius: var(--repellerRadius);
+  --x: var(--mouseX);
+  --y: var(--mouseY);
+  display: block;
+  background: #f00;
+  left: calc(var(--cx) * 1px);
+  top: calc(var(--cy) * 1px);
+  opacity: 0.4;
+  box-shadow: none;
+}
+
+.debug .debug-circle:after {
+  content: none;
+}

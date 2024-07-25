@@ -1,0 +1,61 @@
+:root {
+  --card-width: 200px;
+  --card-height: 300px;
+  --angle: 0;
+  --abs-angle: max(var(--angle), var(--angle) * -1);
+  --tan-alpha: tan(var(--angle));
+  --skew-padding: calc(var(--card-width) * var(--tan-alpha));
+  --gap: 10px;
+  --rotation: 0;
+}
+
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  place-items: center;
+}
+
+.stack {
+  position: relative;
+  margin: 0 auto;
+  width: 200px;
+  height: 300px;
+}
+
+.card {
+  --base-hue: 140;
+  --saturation: 95%;
+  --lightness: 80%;
+  --color-rotation: calc(var(--rotation) * var(--i));
+  --skew-padding: calc(var(--gap) * var(--tan-alpha));
+  --translation: calc(var(--skew-padding));
+  width: var(--card-width);
+  height: var(--card-height);
+  border-radius: 25px;
+  background: #333;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(
+    calc(var(--i) * var(--gap)),
+    calc(var(--translation) * var(--i))
+  );
+  box-shadow: -2px 0 10px 0 rgba(0, 0, 0, 0.3);
+  background-color: hsl(
+    calc(var(--base-hue) + var(--color-rotation)),
+    var(--saturation),
+    var(--lightness)
+  );
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s;
+}
+
+.stack:hover .card {
+  --skew-padding: calc(var(--gap) * var(--tan-alpha) * 2);
+  transform: translate(
+    calc(var(--i) * var(--gap) * 2),
+    calc(var(--translation) * var(--i))
+  );
+}

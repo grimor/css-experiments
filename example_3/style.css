@@ -1,0 +1,130 @@
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  place-items: center;
+}
+
+#example_3 {
+  margin: 0 auto;
+}
+
+.counter {
+  display: flex;
+  height: 1lh;
+  font-size: 5rem;
+  box-shadow: 0px 24px 38px 3px rgba(0, 0, 0, 0.24),
+    0px 9px 46px 8px rgba(0, 0, 0, 0.42), 0px 11px 15px -7px rgba(0, 0, 0, 0.4);
+  border: 2px solid #222;
+}
+
+.counter__segment {
+  --diameter: 2lh;
+  --speed: 1;
+  position: relative;
+  width: 2ch;
+  height: 1lh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(
+    0deg,
+    rgba(25, 25, 25, 1) 0%,
+    rgba(50, 50, 50, 1) 50%,
+    rgba(10, 10, 10, 1) 100%
+  );
+  overflow: hidden;
+  border-right: 1px solid #444;
+}
+
+.counter__segment:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0) 45%,
+    rgba(255, 255, 255, 1) 65%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  opacity: 0.15;
+}
+
+.counter__segment + .counter__segment {
+  border-left: 1px solid #111;
+}
+
+.counter__segment:last-child {
+  border-right: none;
+}
+
+.counter__segment-number {
+  /* Unit angle, based on total number of elements */
+  --unit: calc(360 / var(--count));
+  /* Initial angle of each element to calculate Y offset */
+  --initialAngle: calc(var(--unit) * var(--i));
+  /* Current angle of element, based on changing `--angle` variable from animation */
+  --currAngle: calc((var(--angle, 0) + var(--initialAngle)));
+  /* Current angle but with `deg` unit */
+  --currAngleDeg: calc(var(--currAngle) * 1deg);
+  /* Calculated positon in Y space  */
+  --yPos: calc(sin(var(--currAngleDeg)) * (var(--diameter) / 2 + 32px));
+  /* Little hack to simulate sign(), which is unavailable right now */
+  --isVisible: clamp(0, calc((cos(var(--currAngleDeg)) - 0.6) * 1000), 1);
+
+  position: absolute;
+  inset: 0;
+  transform: rotateX(var(--currAngleDeg)) translate3d(0, var(--yPos), 0);
+  backface-visibility: hidden;
+  animation: circle calc(1s * var(--speed)) linear infinite;
+  transform-style: preserve-3d;
+  text-align: center;
+  opacity: calc(cos(var(--currAngleDeg)) * var(--isVisible));
+}
+
+@property --angle {
+  syntax: "<number>";
+  initial-value: 0;
+  inherits: false;
+}
+
+@keyframes circle {
+  0% {
+    --angle: 0;
+  }
+  100% {
+    --angle: -360;
+  }
+}
+
+.debug .counter {
+  border: 0;
+  box-shadow: none;
+}
+
+.debug .counter__segment {
+  overflow: visible;
+  transform: rotateY(45deg);
+  transform-style: preserve-3d;
+  background: none;
+  border: 0;
+}
+
+.debug .counter__segment:after {
+  background: none;
+}
+
+.debug .counter__segment + .counter__segment {
+  border: 0;
+}
+
+.debug .counter__segment:last-child {
+  border: 0;
+}
+
+.debug .counter__segment-number {
+  opacity: 1;
+  background: none;
+}

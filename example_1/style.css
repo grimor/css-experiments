@@ -1,0 +1,60 @@
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  width: 100%;
+}
+
+#app {
+  margin: 0 auto;
+}
+:root {
+  background: #1a1918;
+}
+
+.spotlight {
+  /* Calculate the distance on X and Y axis */
+  --dx: calc(var(--mouseX) - var(--x));
+  --dy: calc(var(--mouseY) - var(--y));
+  /* Calculate hypothenuse (distance) from spotlight position to mouse position */
+  --d: hypot(var(--dx), var(--dy));
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(calc(var(--x) * 1px), calc(var(--y) * 1px))
+    rotate(
+      atan2(
+        calc((var(--mouseX) - var(--x)) * 1),
+        calc((var(--mouseY) - var(--y)) * -1)
+      )
+    );
+}
+
+.spotlight:after {
+  --height: calc((var(--d) * 1px));
+  content: "";
+  position: absolute;
+  top: calc((var(--d) * -1px) + 50%);
+  left: calc(50% - 100px);
+  width: 18px;
+  height: calc(var(--height));
+  border-top: var(--height) solid rgba(255, 255, 255, 0.2);
+  border-left: 90px solid transparent;
+  border-right: 90px solid transparent;
+
+  filter: blur(5px);
+}
+
+.spotlight--center {
+  position: absolute;
+  width: 200px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translate(-100px, calc(var(--d) * -1px - 40px));
+
+  box-shadow: inset 0 0 50px 0 rgba(255, 255, 255, 1);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  filter: blur(5px);
+}

@@ -1,0 +1,61 @@
+:root {
+  font-family: monospace;
+  line-height: 1.5;
+  font-weight: 600;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #1a1918;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  view-transition-name: body;
+  contain: layout;
+}
+
+@view-transition {
+  navigation: auto;
+}
+
+/* Customize the default animation behavior */
+
+::view-transition-group(root) {
+  animation-duration: 0.5s;
+}
+
+/* Create a custom animation */
+
+@keyframes move-out {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(0);
+  }
+}
+
+@keyframes move-in {
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Apply the custom animation to the old and new page states */
+::view-transition-old(body) {
+  animation: 0.45s ease-in both move-out;
+}
+
+::view-transition-new(body) {
+  animation: 0.45s ease-in both move-in;
+  animation-delay: 0.25s;
+}
