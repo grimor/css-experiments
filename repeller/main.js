@@ -23,7 +23,7 @@ const update = () => {
   }
   document.documentElement.style.setProperty(
     "--repellerRadius",
-    params.repellerRadius
+    params.repellerRadius,
   );
 };
 
